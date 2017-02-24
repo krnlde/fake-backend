@@ -29,7 +29,6 @@ route.get('/test', (req, res) => {
   res.json({
     name:       `${faker.name.firstName()} ${faker.name.lastName()}`,
     city:       `${faker.address.city()}`,
-    yourmama:   `${faker.name.firstName()}`,
     _timestamp: moment().toString(),
   });
 });
