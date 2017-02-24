@@ -1,0 +1,13 @@
+<dl>
+  {{#each availableRoutes}}
+    <dt>
+      {{#each methods}}
+        <span>{{this}}</span>
+      {{/each}}
+    </dt>
+    <dd>
+      <a href="{{path}}">{{path}}</a>
+    </dd>
+
+  {{/each}}
+</dl>
