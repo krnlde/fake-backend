@@ -1,8 +1,6 @@
 const moment   = require('moment');
 const {Router} = require('express');
 const faker    = require('faker');
-const URL      = require('url');
-const fs       = require('fs');
 const path     = require('path');
 
 const route = Router();
