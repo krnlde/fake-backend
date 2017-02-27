@@ -3,6 +3,8 @@ const expressHandlebars = require('express-handlebars');
 const bodyParser        = require('body-parser');
 const helmet            = require('helmet');
 const morgan            = require('morgan');
+const moment            = require('moment');
+const faker             = require('faker');
 const endpoints         = require('./endpoints');
 
 const PORT = 3000;
@@ -24,6 +26,15 @@ app.engine('.hbs', expressHandlebars({
   extname: '.hbs',
 }));
 app.set('view engine', '.hbs');
+
+
+// Consistent results everyday
+const seed = parseFloat(moment().startOf('day').format('X'));
+
+app.use((req, res, next) => {
+  faker.seed(seed);
+  next();
+});
 
 app.use(endpoints);
 

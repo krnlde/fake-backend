@@ -10,14 +10,6 @@ const sendFileOptions = Object.freeze({
   dotfiles: 'deny',
 });
 
-// Consistent results everyday
-const seed = parseFloat(moment().startOf('day').format('X'));
-
-route.use((req, res, next) => {
-  faker.seed(seed);
-  next();
-});
-
 module.exports = route;
 
 ///////////////////////////
