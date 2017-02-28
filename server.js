@@ -5,7 +5,9 @@ const helmet            = require('helmet');
 const morgan            = require('morgan');
 const moment            = require('moment');
 const faker             = require('faker');
-const endpoints         = require('./endpoints');
+const fs                = require('fs-promise');
+const path              = require('path');
+const co                = require('co'); // replace with async/await when available in node.js
 
 const PORT = 3000;
 const app = express();
@@ -36,10 +38,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(endpoints);
+let endpoints = [];
+
+co(function* () { // replace with async/await when available in node.js
+  for (let endpointPath of yield fs.readdir('./endpoints')) {
+    const endpoint = require(path.resolve('./endpoints', endpointPath));
+    app.use(endpoint);
+    endpoints.push(endpoint);
+  }
+});
+
+// app.use(endpoints);
 
 app.get('/', (req, res) => {
-  const availableRoutes = endpoints.stack // registered routes
+  const availableRoutes = endpoints.reduce((previous, endpoint) => [...previous, ...endpoint.stack], []) // registered routes
     .filter(r => r.route)        // take out all the middleware
     .map(r => {
       const methods = Object.keys(r.route.methods)
@@ -57,9 +69,4 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Fake backend listening on port ${PORT}!`);
-});
-
-process.on('exit', (argument) => {
-  console.log('Received exit signal');
-  app.close();
 });
