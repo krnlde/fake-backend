@@ -7,7 +7,6 @@ const moment            = require('moment');
 const faker             = require('faker');
 const fs                = require('fs-promise');
 const path              = require('path');
-const co                = require('co'); // replace with async/await when available in node.js
 
 const PORT = 3000;
 const app = express();
@@ -40,13 +39,13 @@ app.use((req, res, next) => {
 
 let endpoints = [];
 
-co(function* () { // replace with async/await when available in node.js
-  for (let endpointPath of yield fs.readdir('./endpoints')) {
+(async function () {
+  for (let endpointPath of await fs.readdir('./endpoints')) {
     const endpoint = require(path.resolve('./endpoints', endpointPath));
     app.use(endpoint);
     endpoints.push(endpoint);
   }
-});
+})();
 
 // app.use(endpoints);
 
