@@ -66,6 +66,11 @@ app.get('/', (req, res) => {
   res.render('listing', {availableRoutes});
 });
 
+// Handle 404
+app.use((request, response) => {
+  response.status(404).type('text').send(`Endpoint "${request.method} ${request.url}" not configured`);
+})
+
 app.listen(PORT, () => {
   console.log(`Fake backend listening on port ${PORT}!`);
 });
