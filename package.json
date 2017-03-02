@@ -2,6 +2,7 @@
   "name": "fake-backend",
   "version": "1.0.0",
   "description": "",
+  "repository": "https://github.com/krnlde/fake-backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -17,7 +18,7 @@
   "author": "Kai Dorschner",
   "license": "MIT",
   "engines": {
-    "node" : ">=7.7.0"
+    "node" : ">=7.7.1"
   },
   "dependencies": {
     "body-parser": "^1.16.1",
