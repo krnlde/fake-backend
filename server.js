@@ -5,7 +5,7 @@ const helmet            = require('helmet');
 const morgan            = require('morgan');
 const moment            = require('moment');
 const faker             = require('faker');
-const fs                = require('fs-promise');
+const fsp               = require('fs-promise');
 const path              = require('path');
 
 const PORT = 3000;
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 let endpoints = [];
 
 (async function () {
-  for (let endpointPath of await fs.readdir('./endpoints')) {
+  for (let endpointPath of await fsp.readdir('./endpoints')) {
     const endpoint = require(path.resolve('./endpoints', endpointPath));
     app.use(endpoint);
     endpoints.push(endpoint);
