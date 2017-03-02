@@ -37,18 +37,6 @@ app.use((req, res, next) => {
   next();
 });
 
-let endpoints = [];
-
-(async function () {
-  for (let endpointPath of await fsp.readdir('./endpoints')) {
-    const endpoint = require(path.resolve('./endpoints', endpointPath));
-    app.use(endpoint);
-    endpoints.push(endpoint);
-  }
-})();
-
-// app.use(endpoints);
-
 app.get('/', (req, res) => {
   const availableRoutes = endpoints.reduce((previous, endpoint) => [...previous, ...endpoint.stack], []) // registered routes
     .filter(r => r.route)        // take out all the middleware
@@ -66,10 +54,21 @@ app.get('/', (req, res) => {
   res.render('listing', {availableRoutes});
 });
 
-// Handle 404
-app.use((request, response) => {
-  response.status(404).type('text').send(`Endpoint "${request.method} ${request.url}" not configured`);
-})
+
+let endpoints = [];
+
+(async function () {
+  for (let endpointPath of await fsp.readdir('./endpoints')) {
+    const endpoint = require(path.resolve('./endpoints', endpointPath));
+    app.use(endpoint);
+    endpoints.push(endpoint);
+  }
+
+  // Handle 404
+  app.use((request, response) => {
+    response.status(404).type('text').send(`Endpoint "${request.method} ${request.url}" is not yet configured`);
+  });
+})();
 
 app.listen(PORT, () => {
   console.log(`Fake backend listening on port ${PORT}!`);
