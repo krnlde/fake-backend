@@ -2,6 +2,7 @@ const express           = require('express');
 const expressHandlebars = require('express-handlebars');
 const bodyParser        = require('body-parser');
 const helmet            = require('helmet');
+const cors              = require('cors');
 const morgan            = require('morgan');
 const moment            = require('moment');
 const faker             = require('faker');
@@ -14,6 +15,9 @@ const app = express();
 app.use(helmet({
   noCache: true
 }));
+
+app.use(cors());
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -26,6 +30,7 @@ app.engine('.hbs', expressHandlebars({
   defaultLayout: 'main',
   extname: '.hbs',
 }));
+
 app.set('view engine', '.hbs');
 
 

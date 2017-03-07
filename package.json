@@ -18,10 +18,11 @@
   "author": "Kai Dorschner",
   "license": "MIT",
   "engines": {
-    "node" : ">=7.7.1"
+    "node": ">=7.7.1"
   },
   "dependencies": {
     "body-parser": "^1.16.1",
+    "cors": "^2.8.1",
     "express": "^4.14.1",
     "express-handlebars": "^3.0.0",
     "faker": "^4.1.0",
