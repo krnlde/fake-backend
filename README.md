@@ -8,7 +8,7 @@ or
 ## Run
 `> npm start`
 
-## Run and hotreload (via [pm2](https://github.com/Unitech/pm2))
+## Run and hotreload (via [nodemon](https://github.com/remy/nodemon))
 Useful when developing APIs.
 
-`> pm2 start server.js --watch`
+`> nodemon server.js`
