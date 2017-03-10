@@ -53,15 +53,16 @@ app.set('view engine', '.hbs');
 // Consistent results everyday
 const seed = parseFloat(moment().startOf('day').format('X'));
 
-app.use((req, res, next) => {
+app.use((request, response, next) => {
   faker.seed(seed);
   next();
 });
 
-app.get('/', (req, res) => {
-  const {host} = req.headers;
-  const availableRoutes = endpoints.reduce((previous, endpoint) => [...previous, ...endpoint.stack], []) // registered routes
-    .filter(r => r.route)        // take out all the middleware
+app.get('/', (request, response) => {
+  const {host} = request.headers;
+  const availableRoutes = endpoints
+    .reduce((previous, endpoint) => [...previous, ...endpoint.stack], []) // registered routes
+    .filter(r => r.route) // take out all the middleware
     .map(r => {
       const methods = Object.keys(r.route.methods)
         .filter((method) => r.route.methods[method])
@@ -73,7 +74,7 @@ app.get('/', (req, res) => {
       };
     });
 
-  res.render('listing', {
+  response.render('listing', {
     birthDate,
     version: pkg.version,
     host,
