@@ -89,11 +89,13 @@ let endpoints = [];
   for (let endpointPath of await fsp.readdir('./endpoints')) {
     const fullPath = path.resolve('./endpoints', endpointPath);
     const stat = await fsp.stat(fullPath);
-    if (stat.isFile() && mime.lookup(endpointPath) === 'application/javascript') {
-      const endpoint = require(fullPath);
-      app.use('/', endpoint);
-      endpoints.push(endpoint);
-    }
+
+    if (!stat.isFile()) continue;
+    if (mime.lookup(endpointPath) !== 'application/javascript') continue;
+
+    const endpoint = require(fullPath);
+    app.use('/', endpoint);
+    endpoints.push(endpoint);
   }
 
   // Handle 404
@@ -102,6 +104,4 @@ let endpoints = [];
   });
 })();
 
-app.listen(PORT, () => {
-  console.log(`Fake backend listening on port ${PORT}!`);
-});
+app.listen(PORT, () => console.log(`Fake backend listening on port ${PORT}!`) );
