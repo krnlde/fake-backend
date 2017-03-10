@@ -2,14 +2,14 @@ const moment   = require('moment');
 const {Router} = require('express');
 const faker    = require('faker');
 
-const route = Router();
+const router = Router();
 
-module.exports = route;
+module.exports = router;
 
 ///////////////////////////
 
 
-route.get('/test', (req, res) => {
+router.get('/demo', (req, res) => {
   res.json({
     name:       `${faker.name.firstName()} ${faker.name.lastName()}`,
     city:       `${faker.address.city()}`,

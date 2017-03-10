@@ -1,3 +1,5 @@
+const pkg               = require('./package.json');
+
 const express           = require('express');
 const expressHandlebars = require('express-handlebars');
 const bodyParser        = require('body-parser');
@@ -8,9 +10,11 @@ const moment            = require('moment');
 const faker             = require('faker');
 const fsp               = require('fs-promise');
 const path              = require('path');
+const mime              = require('mime-types');
 
-const PORT = 3000;
-const app = express();
+const birthDate = moment().toString();
+const PORT      = 3000;
+const app       = express();
 
 app.use(helmet({
   noCache: true
@@ -29,6 +33,18 @@ app.use(morgan('dev'));
 app.engine('.hbs', expressHandlebars({
   defaultLayout: 'main',
   extname: '.hbs',
+  helpers: {
+    to_state(str) {
+      switch (str.toUpperCase()) {
+        case 'GET':     return 'success';
+        case 'POST':    return 'primary';
+        case 'PUT':     return 'warning';
+        case 'DELETE':  return 'danger';
+        case 'OPTIONS': return 'info';
+        default:        return 'default';
+      }
+    }
+  }
 }));
 
 app.set('view engine', '.hbs');
@@ -43,6 +59,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
+  const {host} = req.headers;
   const availableRoutes = endpoints.reduce((previous, endpoint) => [...previous, ...endpoint.stack], []) // registered routes
     .filter(r => r.route)        // take out all the middleware
     .map(r => {
@@ -52,11 +69,16 @@ app.get('/', (req, res) => {
 
       return {
         path: r.route.path,
-        methods
+        methods,
       };
     });
 
-  res.render('listing', {availableRoutes});
+  res.render('listing', {
+    birthDate,
+    version: pkg.version,
+    host,
+    availableRoutes
+  });
 });
 
 
@@ -64,9 +86,13 @@ let endpoints = [];
 
 (async function () {
   for (let endpointPath of await fsp.readdir('./endpoints')) {
-    const endpoint = require(path.resolve('./endpoints', endpointPath));
-    app.use(endpoint);
-    endpoints.push(endpoint);
+    const fullPath = path.resolve('./endpoints', endpointPath);
+    const stat = await fsp.stat(fullPath);
+    if (stat.isFile() && mime.lookup(endpointPath) === 'application/javascript') {
+      const endpoint = require(fullPath);
+      app.use('/', endpoint);
+      endpoints.push(endpoint);
+    }
   }
 
   // Handle 404
