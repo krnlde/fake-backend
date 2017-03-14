@@ -6,6 +6,7 @@ const bodyParser        = require('body-parser');
 const helmet            = require('helmet');
 const cors              = require('cors');
 const morgan            = require('morgan');
+const compression       = require('compression');
 const moment            = require('moment');
 const faker             = require('faker');
 const fsp               = require('fs-promise');
@@ -27,6 +28,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // parse application/json
 app.use(bodyParser.json());
+
+app.use(compression());
 
 app.use(morgan('dev'));
 
@@ -57,6 +60,8 @@ app.use((request, response, next) => {
   faker.seed(seed);
   next();
 });
+
+app.use(express.static('static'));
 
 app.get('/', (request, response) => {
   const {host} = request.headers;
