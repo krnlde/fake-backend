@@ -11,6 +11,8 @@ const moment            = require('moment');
 const faker             = require('faker');
 const fsp               = require('fs-promise');
 const path              = require('path');
+const URL               = require('url');
+const chalk             = require('chalk');
 const mime              = require('mime-types');
 
 const birthDate = moment().toString();
@@ -109,4 +111,12 @@ let endpoints = [];
   });
 })();
 
-app.listen(PORT, () => console.log(`Fake backend listening on port ${PORT}!`) );
+const server = app.listen(PORT, () => {
+  const port = server.address().port;
+  let address = server.address().address;
+  address = address === '::' ? `[${address}]` : address;
+
+  const url = URL.parse(`http://${address}:${port}`).href;
+
+  console.log(`Fake backend listening on ${chalk.green(url)}`)
+});
