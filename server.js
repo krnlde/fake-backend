@@ -55,10 +55,10 @@ app.engine('.hbs', expressHandlebars({
 app.set('view engine', '.hbs');
 
 
-// Consistent results everyday
-const seed = parseFloat(moment().startOf('day').format('X'));
-
 app.use((request, response, next) => {
+  // Consistent results everyday
+  const seed = parseFloat(moment().startOf('day').format('X'));
+
   faker.seed(seed);
   next();
 });
