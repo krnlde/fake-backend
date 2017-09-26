@@ -6,3 +6,12 @@ patch:
   'npm:ms:20170412':
     - compression > debug > ms:
         patched: '2017-06-08T08:17:37.828Z'
+  'npm:debug:20170905':
+    - compression > debug:
+        patched: '2017-09-26T23:23:09.362Z'
+    - morgan > debug:
+        patched: '2017-09-26T23:23:09.362Z'
+    - helmet > connect > debug:
+        patched: '2017-09-26T23:23:09.362Z'
+    - helmet > connect > finalhandler > debug:
+        patched: '2017-09-26T23:23:09.362Z'
