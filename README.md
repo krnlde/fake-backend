@@ -1,5 +1,7 @@
 # fake-backend
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/krnlde/fake-backend.svg)](https://greenkeeper.io/)
+
 ## Install
 `> npm install`
 or
