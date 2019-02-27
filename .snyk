@@ -5,6 +5,8 @@ ignore: {}
 patch:
   'npm:ms:20170412':
     - compression > debug > ms:
+        patched: '2017-05-23T23:27:03.832Z'
+    - morgan > debug > ms:
         patched: '2017-06-08T08:17:37.828Z'
     - express > finalhandler > debug > ms:
         patched: '2019-02-27T10:24:04.170Z'
